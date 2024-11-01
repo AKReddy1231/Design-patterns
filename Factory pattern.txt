@@ -26,42 +26,31 @@ This ensures that all specific burger types (like CheeseBurger and VeggieBurger)
 
 from abc import ABC, abstractmethod
 
-# Step 1: Create an abstract class for the Product (Burger)
-class Burger(ABC):
-    @abstractmethod
-    def prepare(self):
-        pass
+class Burger:
+    def __init__(self, ingredients):
+        self.ingredients = ingredients
 
-# Step 2: Create concrete classes for specific burgers (CheeseBurger, VeggieBurger)
-class CheeseBurger(Burger):
-    def prepare(self):
-        return "Preparing a Cheese Burger with cheese, patty, and sauce."
+    def print(self):
+        print(self.ingredients)
 
-class VeggieBurger(Burger):
-    def prepare(self):
-        return "Preparing a Veggie Burger with veggies, patty, and sauce."
-
-# Step 3: Create the Burger Factory (No Static Method)
 class BurgerFactory:
-    def get_burger(self, burger_type):
-        if burger_type == 'CheeseBurger':
-            return CheeseBurger()
-        elif burger_type == 'VeggieBurger':
-            return VeggieBurger()
-        else:
-            return None
+    
+    def createCheeseBurger(self):
+        ingredients = ["bun", "cheese", "beef-patty"]
+        return Burger(ingredients)
+    
+    def createDeluxeCheeseBurger(self):
+        ingredients = ["bun", "tomatoe", "lettuce", "cheese", "beef-patty"]
+        return Burger(ingredients)
 
-# Step 4: Client code using the factory
-factory = BurgerFactory()
+    def createVeganBurger(self):
+        ingredients = ["bun", "special-sauce", "veggie-patty"]
+        return Burger(ingredients)
 
-burger = factory.get_burger('CheeseBurger')
-if burger:
-    print(burger.prepare())  # Output: Preparing a Cheese Burger with cheese, patty, and sauce.
-
-burger = factory.get_burger('VeggieBurger')
-if burger:
-    print(burger.prepare())  # Output: Preparing a Veggie Burger with veggies, patty, and sauce.
-
+burgerFactory = BurgerFactory()
+burgerFactory.createCheeseBurger().print()
+burgerFactory.createDeluxeCheeseBurger().print()
+burgerFactory.createVeganBurger().print()
 
 Advantages of Factory Pattern:
 After explaining the example, highlight the key benefits:
