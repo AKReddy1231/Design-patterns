@@ -1,0 +1,51 @@
+   Singleton pattern:
+def: Purpose: Ensures that a class has only one instance and provides a global point of access to it.
+
+The Singleton Pattern is particularly useful when you need to ensure that only one instance of a class exists, and it’s used across the application. Common examples include database connections, configuration managers, loggers, or any resource that should be controlled centrally.
+
+code:
+  
+class ApplicationState:
+    instance = None  # Class attribute to store the single instance
+
+    def __init__(self):
+        # Initialize the login state
+        self.isLoggedIn = False
+
+    @staticmethod
+    def getAppState():
+        # Check if an instance already exists
+        if not ApplicationState.instance:  
+            # If no instance exists, create it
+            ApplicationState.instance = ApplicationState()
+        return ApplicationState.instance  # Return the single instance
+
+
+# Create the first reference to the Singleton instance
+appState1 = ApplicationState.getAppState()
+print(appState1.isLoggedIn)  # Output: False
+
+# Create a second reference to the Singleton instance
+appState2 = ApplicationState.getAppState()
+appState1.isLoggedIn = True  # Set isLoggedIn to True using appState1
+
+# Both references should reflect the same state since they refer to the same instance
+print(appState1.isLoggedIn)  # Output: True
+print(appState2.isLoggedIn)  # Output: True
+
+Why This Works as Singleton
+Single Instance:
+
+Both appState1 and appState2 point to the same instance of ApplicationState, as verified by modifying isLoggedIn through appState1 and seeing the change reflected in appState2.
+Centralized State Management:
+
+Any change to isLoggedIn via one reference (e.g., appState1) will be visible through any other reference (e.g., appState2), ensuring consistency across the application.
+
+
+Why AddSingleton is Used
+AddSingleton is beneficial when:
+
+You have services that need to maintain a consistent state throughout the application lifecycle (e.g., configuration settings, caching mechanisms, or logging services).
+The service is resource-intensive to create, so creating a single instance and sharing it optimizes resource usage.
+Comparison with 
+
