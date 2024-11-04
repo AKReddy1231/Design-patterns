@@ -1,0 +1,82 @@
+   Structural pattern:
+
+Adapter pattern:
+
+def:  Adapters allow incompatible objects to be used together. Following the Open-Closed principle, we can extend class behaviour without modifying the class itself.
+If a MicroUsbCable class is initially incompatible with UsbPort, we can create a wrapper class (i.e. an Adapter), which makes them compatible. In this case, a MicroToUsbAdapter makes them compatible, similar to how we use adapters in the real-world.
+
+code:
+
+# UsbCable class with plugUsb method
+class UsbCable:
+    def __init__(self):
+        self.isPlugged = False  # Initial state is not plugged in
+
+    def plugUsb(self):
+        self.isPlugged = True  # Set state to plugged in
+        print("USB cable plugged in.")
+
+# UsbPort class that accepts only UsbCable-compatible objects
+class UsbPort:
+    def __init__(self):
+        self.portAvailable = True  # Indicates if the port is available
+
+    def plug(self, usb):
+        if self.portAvailable:
+            usb.plugUsb()
+            self.portAvailable = False  # Port is now occupied
+            print("USB device connected to the port.")
+        else:
+            print("Port is already in use.")
+
+# MicroUsbCable class with incompatible plugMicroUsb method
+class MicroUsbCable:
+    def __init__(self):
+        self.isPlugged = False  # Initial state is not plugged in
+
+    def plugMicroUsb(self):
+        self.isPlugged = True  # Set state to plugged in
+        print("Micro USB cable plugged in.")
+
+# Adapter class to make MicroUsbCable compatible with UsbPort
+class MicroToUsbAdapter(UsbCable):
+    def __init__(self, microUsbCable):
+        super().__init__()  # Initialize UsbCable attributes
+        self.microUsbCable = microUsbCable  # Store the MicroUsbCable instance
+
+    def plugUsb(self):
+        # Adapt plugUsb() to plugMicroUsb() on the micro USB cable
+        self.microUsbCable.plugMicroUsb()
+        self.isPlugged = True  # Update the adapter's isPlugged status
+        print("Adapter connected: Micro USB cable now acts as USB.")
+
+# Testing the Adapter with State Checks
+
+# Create a MicroUsbCable
+microUsbCable = MicroUsbCable()
+
+# Create an adapter for the MicroUsbCable
+microToUsbAdapter = MicroToUsbAdapter(microUsbCable)
+
+# Create a UsbPort
+usbPort = UsbPort()
+
+# Plug the adapter into the UsbPort
+usbPort.plug(microToUsbAdapter)
+
+# Check the states
+print(microUsbCable.isPlugged)  # Should print True, as the micro USB cable is now plugged in
+print(microToUsbAdapter.isPlugged)  # Should print True, indicating the adapter itself is plugged in
+print(usbPort.portAvailable)  # Should print False, indicating the port is now occupied
+
+     uses:
+   
+Legacy Code Integration: Enables new code to interact with older systems or APIs without modifying the legacy code.
+
+Flexibility in System Design: Promotes flexible system design by allowing components to interact without changing their original code.
+
+Reusable Code: Reuses existing functionality in a different context by adapting the interface as needed.
+
+Simplifies Client Code: Simplifies client code by providing a consistent interface, reducing complexity when dealing with multiple external or third-party libraries.
+      
+

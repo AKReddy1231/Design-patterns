@@ -1,0 +1,52 @@
+
+
+         Behavioual pattern:
+
+
+Observer pattern(pub/sub):  It's common for different components of an app to respond to events or state changes, but how can we communicate these events?
+The Observer pattern is a popular solution. We have a Subject (aka Publisher) which will be the source of events. And we could have multiple Observers (aka Subscribers) which will recieve events from the Subject in realtime
+
+class YoutubeChannel:
+    def __init__(self, name):
+        self.name = name
+        self.subscribers = []
+
+    def subscribe(self, sub):
+        self.subscribers.append(sub)
+    
+    def notify(self, event):
+        for sub in self.subscribers:
+            sub.sendNotification(self.name, event)
+
+from abc import ABC, abstractmethod
+
+class YoutubeSubscriber(ABC):
+    @abstractmethod
+    def sendNotification(self, event):
+        pass
+
+class YoutubeUser(YoutubeSubscriber):
+    def __init__(self, name):
+        self.name = name
+    
+    def sendNotification(self, channel, event):
+        print(f"User {self.name} received notification from {channel}: {event}")
+
+channel = YoutubeChannel("neetcode")
+
+channel.subscribe(YoutubeUser("sub1"))
+channel.subscribe(YoutubeUser("sub2"))
+channel.subscribe(YoutubeUser("sub3"))
+
+channel.notify("A new video released")
+
+
+The Publisher-Subscriber (Pub-Sub) Pattern, or Observer Pattern, is widely used in software design to create a flexible communication system between different components.
+ Here are some common uses, along with examples to illustrate how the pattern is applied:
+
+Notification Services
+Use Case: Applications that need to notify users or other systems about changes.
+Example: In a social media app, when a user posts content, their followers (subscribers) receive notifications. The user acts as a publisher, while each follower acts as a subscriber, receiving notifications only when there's a new post.
+4. Real-Time Data Feeds
+Use Case: Systems that require real-time updates, like stock prices or sports scores.
+Example: In a financial application, multiple components may subscribe to stock price updates. Whenever the stock price changes, each subscribed component receives the updated price, allowing for real-time analytics and display without hard-coded connections.
